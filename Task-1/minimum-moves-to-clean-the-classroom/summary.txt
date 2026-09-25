@@ -1,0 +1,17 @@
+You are a proficient Java programmer and familiar with various algorithms.
+Your task is to implement a Java code given a natural language description illustrating an algorithm and a Java signature.
+
+- 整体思路：采用广度优先搜索（BFS）结合状态压缩（位掩码），寻找在能量限制下收集网格中所有 'L' 的最短步数。
+- 数据结构与初始化：利用 `m` 和 `n` 记录网格尺寸，二维数组 `d` 记录每个 'L' 的独立索引，`cnt` 记录 'L' 的总数。起始坐标为 `x` 和 `y`。核心数据结构为 4D 布尔数组 `vis[m][n][energy+1][1 << cnt]` 记录访问状态，以及 BFS 队列 `q` 存储状态 `[当前X, 当前Y, 当前能量, 掩码]`。初始掩码设为 `(1 << cnt) - 1`，方向数组 `dirs` 设为 `{-1, 0, 1, 0, -1}`。
+- 核心执行逻辑：遍历网格初始化起点 'S' 与目标 'L' 的信息，若 `cnt == 0` 则直接返回 `0`。队列按层遍历并用 `ans` 记录步数，弹出当前状态后若掩码为 `0` 则判定成功。若当前能量 `<= 0` 则跳过。向 4 个方向扩展，检查边界且目标位置不为障碍物 'X'。若遇到 'R' 则能量恢复为 `energy`，否则能量减 1。若遇到 'L'，则用位运算 `nxtMask &= ~(1 << d[nx][ny])` 清除对应掩码位。若新状态未被访问，则标记 `vis` 数组并将其入队。
+- 结果返回：当掩码为 0 时返回当前步数 `ans`。若队列清空仍未达成则返回 `-1`。
+
+Please implement the function with the following template.
+
+```java
+class Solution {
+    public int minMoves(String[] classroom, int energy) {
+        
+    }
+}
+```

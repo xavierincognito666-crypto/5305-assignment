@@ -1,0 +1,30 @@
+You are a proficient Java programmer and familiar with various algorithms.
+Your task is to implement a Java code given a natural language description illustrating an algorithm and a Java signature.
+
+- 整体思路：利用 KMP 算法（通过 LPS 数组）结合三个单调递增的指针，在主串 `s` 中线性查找由两个 `*` 分隔的三段子串 `a, b, c`。要求它们按顺序且不重叠出现，以此求得最短覆盖子串长度[cite: 3]。
+- 数据结构与初始化：
+  1. 用私有方法 `split(p)` 将模式串按 `*` 分为三段 `a, b, c`，并声明常量记录它们及主串的长度 `na, nb, nc, ns`[cite: 3]。
+  2. 拼接构造 `"a#s", "b#s", "c#s"`，通过私有方法 `getLPS` 分别计算出三个 KMP LPS 数组 `lpsA, lpsB, lpsC`[cite: 3]。
+  3. 初始答案 `ans` 设为 `Integer.MAX_VALUE`[cite: 3]。
+- 核心执行逻辑：
+  1. 外层 `for` 循环声明三个指针 `i = 0, j = 0, k = 0`，代表 `a, b, c` 在主串匹配的**末尾索引**[cite: 3]。循环继续的条件为 `i + nb + nc < ns`，并且每次迭代末尾执行 `++i`[cite: 3]。**注意：`j` 和 `k` 必须全程单调递增，绝对不能在循环内重置。**[cite: 3]
+  2. 循环内部依次严格执行三个 `while` 循环推进指针（这构成了核心匹配逻辑）：
+     - 推进 `i` 找 `a`：`while (i < ns && lpsA[na + 1 + i] != na) ++i;`[cite: 3]
+     - 推进 `j` 找 `b`（且保证与 `a` 不重叠）：`while (j < ns && (j < i + nb || lpsB[nb + 1 + j] != nb)) ++j;`[cite: 3]
+     - 推进 `k` 找 `c`（且保证与 `b` 不重叠）：`while (k < ns && (k < j + nc || lpsC[nc + 1 + k] != nc)) ++k;`[cite: 3]
+  3. 在三个 `while` 结束后，若 `k == ns` 越界，说明后续已无法完整匹配 `c`，直接 `break` 退出外层循环[cite: 3]。
+  4. 否则，计算当前合法覆盖长度并更新答案：`ans = Math.min(ans, k - i + na);`[cite: 3]。（注：`k` 是末尾，`i - na + 1` 是起始位置）[cite: 3]。
+- 结果返回：若 `ans` 依然是 `Integer.MAX_VALUE` 返回 `-1`，否则返回 `ans`[cite: 3]。
+- 辅助方法实现：
+  1. `getLPS(String pattern)`：使用标准的 KMP 算法逻辑，循环 `i` 从 1 到末尾，`j` 从 0 开始，最后返回构建好的 `int[] lps`[cite: 3]。
+  2. `split(String p)`：利用 `p.indexOf('*')` 和 `p.indexOf('*', i + 1)` 找到两个星号的精确位置，通过 `substring` 截取并返回包含三段子串的字符串数组[cite: 3]。
+
+Please implement the function with the following template.
+
+```java
+class Solution {
+    public int shortestMatchingSubstring(String s, String p) {
+        
+    }
+}
+```

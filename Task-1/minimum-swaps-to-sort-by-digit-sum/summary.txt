@@ -1,0 +1,17 @@
+You are a proficient Java programmer and familiar with various algorithms.
+Your task is to implement a Java code given a natural language description illustrating an algorithm and a Java signature.
+
+- 整体思路：寻找按数位和及原值排序数组所需的最少交换次数，利用置换环（Cycle Sort）的思想计算连通分量。
+- 数据结构与初始化：创建二维数组 `arr` 存储 `[数位和, 原值]`。使用 HashMap `d` 建立原值到排序后索引的映射。布尔数组 `vis` 记录元素是否已访问，初始答案 `ans` 设为数组长度 `n`。
+- 核心执行逻辑：遍历原数组 `nums`，用辅助函数 `f(x)`（通过取模循环计算数字各位之和）填充 `arr`。对 `arr` 优先按数位和升序排序，若相同则按原值升序排序。遍历排序后的 `arr` 将映射关系 `(原值, 排序后索引)` 存入 HashMap `d`。遍历 0 到 `n-1`，若当前索引 `i` 未被访问，则 `ans` 减 1，并顺着映射关系 `j = d.get(nums[j])` 遍历整个环，将环内元素的 `vis` 均标记为 `true`。
+- 结果返回：返回最终的 `ans`（即元素总数减去置换环的数量），并包含一个辅助方法 `f` 实现十进制数位求和。
+
+Please implement the function with the following template.
+
+```java
+class Solution {
+    public int minSwaps(int[] nums) {
+        
+    }
+}
+```
